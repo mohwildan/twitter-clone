@@ -1,21 +1,23 @@
 import { SparklesIcon } from "@heroicons/react/outline";
 import Input from "./Input";
 import Post from "./Post";
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../Firebase";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Feed() {
- const [post, setPost] = useState([])
+  const [post, setPost] = useState([]);
 
   useEffect(() => {
-   return onSnapshot(query(collection(db, "posts"), orderBy("timestamp", "desc")), (snapshot) => {
-     setPost(snapshot.docs)
-   })
-    
-  }, [])
+    return onSnapshot(
+      query(collection(db, "posts"), orderBy("timestamp", "desc")),
+      (snapshot) => {
+        setPost(snapshot.docs);
+      }
+    );
+  }, []);
 
- 
   return (
     <div className="xl:ml-[370px] border-l border-r border-gray-200  xl:min-w-[576px] sm:ml-[73px] flex-grow max-w-xl">
       <div className="flex py-2 px-3 sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -26,9 +28,19 @@ export default function Feed() {
         </div>
       </div>
       <Input />
-       {post.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      <AnimatePresence>
+        {post.map((post) => (
+          <motion.div
+            key={post.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{duration: 1}}
+          >
+            <Post post={post} id={post.id}/>
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import Sidebar from "../components/Sidebar";
 import Feed from "../components/Feed"
 import Widgets from "../components/Widgets";
 import { useSession } from "next-auth/react"
+import CommentModal from "../components/CommentModal";
 
 
 
@@ -15,9 +16,7 @@ export default function Home() {
       <Sidebar />
       <Feed />
       {/* <Widgets newsResults={newsResults.articles}/> */}
-      {status === "authenticated" && (
-        <p>{session.user.name}</p>
-      )} 
+      <CommentModal />
     </main>
   )
 }
